@@ -21,23 +21,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
-        query.getInBackground("fFDrV82exD", new GetCallback<ParseObject>() {
-            public void done(ParseObject post, ParseException e) {
-                if (e == null) {
-                    post.put("body","This is a new body content");
-                    post.increment("numComments");
-                    post.add("tags","updated-content");
-                    post.addUnique("tags","my-first-post");
-                    post.saveInBackground();
-                } else {
-                    Log.d(tag,"Error occured when retrieving the poqt");
-                }
-            }
-        });
+        ParseObject post = ParseObject.createWithoutData("Post", "fFDrV82exD");
+        post.put("body","This object is updated without retrieving it");
+        post.increment("numComments");
+        post.addUnique("tags","updated-without-retrieval");
+        post.saveInBackground();
     }
-
-
-
 }
 
