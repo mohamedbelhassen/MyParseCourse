@@ -25,16 +25,18 @@ public class MainActivity extends AppCompatActivity {
         query.getInBackground("fFDrV82exD", new GetCallback<ParseObject>() {
             public void done(ParseObject post, ParseException e) {
                 if (e == null) {
-                    Log.d(tag,"Object well retrieved: ");
-                    Log.d(tag,"Post Body: "+post.getString("body"));
-                    Log.d(tag,"Post Tags: "+post.getJSONArray("tags"));
-                    Log.d(tag,"Post numComments: "+post.getInt("numComments"));
+                    post.put("body","This is a new body content");
+                    post.increment("numComments");
+                    post.add("tags","updated-content");
+                    post.addUnique("tags","my-first-post");
+                    post.saveInBackground();
                 } else {
                     Log.d(tag,"Error occured when retrieving the poqt");
                 }
             }
         });
     }
+
 
 
 }
