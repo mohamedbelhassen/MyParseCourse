@@ -7,12 +7,12 @@ import android.util.Log;
 
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseRelation;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,14 +22,16 @@ public class MainActivity extends AppCompatActivity {
         post.put("body", "Hello, My name is Mohamed");
         post.addAllUnique("tags", Arrays.asList("my-first-post", "welcome"));
         post.put("numComments", 0);
-        post.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                if( e == null){
-                    Log.d(tag,"Post object well saved");
-                }else{
-                    Log.d(tag,"Error occured when saving Post object");
-                }
+
+        post.saveInBackground(e -> {
+            if( e == null){
+                Log.d(tag,"Post object well saved");
+                ParseObject comment = new ParseObject("Comment");
+                comment.put("message", "This is an awesome post");
+                comment.put("parent",post);
+                comment.saveInBackground();
+            }else{
+                Log.d(tag,"Error occured when saving Post object");
             }
         });
     }
