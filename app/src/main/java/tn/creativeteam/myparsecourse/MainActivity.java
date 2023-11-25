@@ -21,11 +21,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseObject post = ParseObject.createWithoutData("Post", "fFDrV82exD");
-        post.put("body","This object is updated without retrieving it");
-        post.increment("numComments");
-        post.addUnique("tags","updated-without-retrieval");
-        post.saveInBackground();
+        ParseObject post = ParseObject.createWithoutData("Post", "fDg5MLJGZp");
+        post.deleteInBackground();
     }
 }
 
