@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -22,22 +23,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> q= new ParseQuery<ParseObject>("Post");
-        q.getInBackground("ULDUvxFrd9", (post, e) -> {
-            ParseObject comment = new ParseObject("Comment");
-            comment.put("message", "This is the comment numner "+ (post.getInt("numComments")+1));
-            comment.put("parent",post);
-            comment.saveInBackground(e1 -> {
-                if( e1 == null){
-                    ParseRelation<ParseObject> comments = post.getRelation("comments");
-                    comments.add(comment);
-                    post.increment("numComments");
-                    post.saveInBackground();
-                }else{
-                    Log.d(tag,"**** Error occured when saving Post object");
-                }
-            });
+        ParseObject post = ParseObject.createWithoutData("Post","ULDUvxFrd9");
+        ParseObject comment = new ParseObject("Comment");
+        comment.put("message", "This is just another comment ");
+        comment.put("parent",post);
+        comment.saveInBackground(e1 -> {
+            if( e1 == null){
+                ParseRelation<ParseObject> comments = post.getRelation("comments");
+                comments.add(comment);
+                post.increment("numComments");
+                post.saveInBackground();
+            }else{
+                Log.d(tag,"**** Error occured when saving Post object");
+            }
         });
+
     }
 }
 
