@@ -9,6 +9,7 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
@@ -25,11 +26,9 @@ public class MainActivity extends AppCompatActivity {
         query.getInBackground("fFDrV82exD", new GetCallback<ParseObject>() {
             public void done(ParseObject post, ParseException e) {
                 if (e == null) {
-                    post.put("body","This is a new body content");
-                    post.increment("numComments");
-                    post.add("tags","updated-content");
-                    post.addUnique("tags","my-first-post");
-                    post.saveInBackground();
+                    ParseRelation<ParseObject> commentsRelation = post.getRelation("comments");
+                    ParseObject commentToDelete= ParseObject.createWithoutData("Post", "1zEcyElZ80");
+                    commentsRelation.remove(commentToDelete);
                 } else {
                     Log.d(tag,"Error occured when retrieving the poqt");
                 }
