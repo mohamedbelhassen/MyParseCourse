@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity {
         String tag="MainActivity";
 
         ParseQuery<ParseObject> q= new ParseQuery<ParseObject>("Post");
-        q.getInBackground("ULDUvxFrd9", (post, e) -> {
+        q.getInBackground("sxnqbLt4HE", (post, e) -> {
             ParseObject comment = new ParseObject("Comment");
-            comment.put("message", "This is the comment numner "+ (post.getInt("numComments")+1));
+            comment.put("message", "This is the comment number "+ (post.getInt("numComments")+1));
             comment.put("parent",post);
             comment.saveInBackground(e1 -> {
                 if( e1 == null){
