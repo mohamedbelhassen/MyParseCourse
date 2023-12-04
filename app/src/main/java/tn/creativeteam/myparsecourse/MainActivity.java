@@ -22,13 +22,14 @@ public class MainActivity extends AppCompatActivity {
         String tag="MainActivity";
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
-        query.getInBackground("fFDrV82exD", new GetCallback<ParseObject>() {
+        query.getInBackground("sxnqbLt4HE", new GetCallback<ParseObject>() {
             public void done(ParseObject post, ParseException e) {
                 if (e == null) {
                     post.put("body","This is a new body content");
-                    post.increment("numComments");
+                    post.increment("numComments",1);
                     post.add("tags","updated-content");
-                    post.addUnique("tags","my-first-post");
+                    //either use add or addUnique, not both of them
+                    //post.addUnique("tags","my-first-post");
                     post.saveInBackground();
                 } else {
                     Log.d(tag,"Error occured when retrieving the poqt");
