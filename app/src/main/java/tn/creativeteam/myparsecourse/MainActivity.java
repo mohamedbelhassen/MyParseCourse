@@ -29,7 +29,14 @@ public class MainActivity extends AppCompatActivity {
                 ParseObject comment = new ParseObject("Comment");
                 comment.put("message", "This is an awesome post");
                 comment.put("parent",post);
-                comment.saveInBackground();
+                comment.saveInBackground( excepComment ->{
+                    if(excepComment == null){
+                        ParseRelation<ParseObject> comments = post.getRelation("comments");
+                        comments.add((comment));
+                        post.increment("numComments");
+                        post.saveInBackground();
+                    }
+                });
             }else{
                 Log.d(tag,"Error occured when saving Post object");
             }
