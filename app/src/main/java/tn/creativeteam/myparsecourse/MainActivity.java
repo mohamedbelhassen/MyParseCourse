@@ -14,8 +14,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ParseObject firstObject = new  ParseObject("FirstClass");
-        firstObject.put("message","Hey ! First message from android. Parse is now connected");
+        ParseObject firstObject = new  ParseObject("Car");
+        firstObject.put("marque","Ford");
+        firstObject.put("matricule","120TN2345");
+        firstObject.put("est_vendu",false);
+
         firstObject.saveInBackground(e -> {
             if (e != null){
                 Log.e("MainActivity", e.getLocalizedMessage());
