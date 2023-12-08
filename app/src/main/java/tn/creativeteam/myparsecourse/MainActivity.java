@@ -27,22 +27,13 @@ public class MainActivity extends AppCompatActivity {
 
         ParseQuery<ParseObject> expensiveTeamQuery = ParseQuery.getQuery("Team");
         expensiveTeamQuery.whereGreaterThan("squadMarketValue",100000);
-        ArrayList <String> teamCodes= new ArrayList();
-        expensiveTeamQuery.findInBackground((teamList, e) -> {
-            if (e == null) {
-                Log.d(tag, "Retrieved Teams: " + teamList.size() + " teams");
-                for (ParseObject team: teamList){
-                    teamCodes.add(team.getString("code"));
-                }
-                ParseQuery<ParseObject> playerQuery = ParseQuery.getQuery("Player");
-                playerQuery.whereContainedIn("teamCode",teamCodes);
-                playerQuery.countInBackground((count, e1) -> {
-                    if (e1 == null) {
-                        Log.d(tag, " Number of players belonging to expensive teams : " + count + " players");
-                    }
-                });
-            } else {
-                Log.d(tag, "Error: " + e.getMessage());
+
+        ParseQuery<ParseObject> playerQuery = ParseQuery.getQuery("Player");
+        playerQuery.whereMatchesKeyInQuery("teamCode","code",expensiveTeamQuery);
+
+        playerQuery.countInBackground((count, e1) -> {
+            if (e1 == null) {
+                Log.d(tag, " Number of players belonging to expensive teams : " + count + " players");
             }
         });
 
