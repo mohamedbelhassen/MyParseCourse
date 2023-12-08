@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -12,6 +13,7 @@ import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,21 +23,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Post");
-        query.getInBackground("sxnqbLt4HE", new GetCallback<ParseObject>() {
-            public void done(ParseObject post, ParseException e) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Team");
+        query.whereEqualTo("code", "MCFC");
+        query.findInBackground(new FindCallback<ParseObject>() {
+            public void done(List<ParseObject> teamList, ParseException e) {
                 if (e == null) {
-                    post.put("body","This is a new body content");
-                    post.increment("numComments",1);
-                    post.add("tags","updated-content");
-                    //either use add or addUnique, not both of them
-                    //post.addUnique("tags","my-first-post");
-                    post.saveInBackground();
+                    Log.d(tag, "Retrieved Teams" + teamList.size() + " teams");
                 } else {
-                    Log.d(tag,"Error occured when retrieving the poqt");
+                    Log.d("score", "Error: " + e.getMessage());
                 }
             }
         });
+
     }
 
 
