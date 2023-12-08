@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> teamList, ParseException e) {
                 if (e == null) {
-                    Log.d(tag, "Retrieved Teams" + teamList.size() + " teams");
+                    Log.d(tag, "Retrieved Teams: " + teamList.size() + " teams");
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
                 }
