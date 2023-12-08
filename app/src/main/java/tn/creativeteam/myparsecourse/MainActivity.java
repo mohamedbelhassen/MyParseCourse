@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Player");
         query.whereGreaterThan("marketValue", 1500);
         query.whereEqualTo("position","Keeper");
+        query.orderByAscending("marketValue");
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> playerList, ParseException e) {
                 if (e == null) {
