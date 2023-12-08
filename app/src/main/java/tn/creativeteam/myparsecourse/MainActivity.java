@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -12,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -23,21 +25,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Player");
-        query.selectKeys(Arrays.asList("name", "marketValue", "position"));
-        query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> playerList, ParseException e) {
-                if (e == null) {
-                    Log.d(tag, "Retrieved Players: " + playerList.size() + " players");
-                    for (ParseObject player: playerList){
-                        Log.d(tag, "Name: " + player.getString("name") +
-                                        " is a player having a market value of : " +
-                                        player.getInt("marketValue") +
-                                        " ,Position: "+ player.getString("position"));
-                    }
-                } else {
-                    Log.d("score", "Error: " + e.getMessage());
+        ParseQuery<ParseObject> expensiveTeamQuery = ParseQuery.getQuery("Team");
+        expensiveTeamQuery.whereGreaterThan("squadMarketValue",100000);
+        ArrayList <String> teamCodes= new ArrayList();
+        expensiveTeamQuery.findInBackground((teamList, e) -> {
+            if (e == null) {
+                Log.d(tag, "Retrieved Teams: " + teamList.size() + " teams");
+                for (ParseObject team: teamList){
+                    teamCodes.add(team.getString("code"));
                 }
+                ParseQuery<ParseObject> playerQuery = ParseQuery.getQuery("Player");
+                playerQuery.whereContainedIn("teamCode",teamCodes);
+                playerQuery.countInBackground((count, e1) -> {
+                    if (e1 == null) {
+                        Log.d(tag, " Number of players belonging to expensive teams : " + count + " players");
+                    }
+                });
+            } else {
+                Log.d(tag, "Error: " + e.getMessage());
             }
         });
 
