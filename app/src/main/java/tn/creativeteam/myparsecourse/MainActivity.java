@@ -23,12 +23,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> query = ParseQuery.getQuery("Team");
-        query.whereEqualTo("code", "MCFC");
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Player");
+        query.whereLessThan("marketValue", 1500);
         query.findInBackground(new FindCallback<ParseObject>() {
-            public void done(List<ParseObject> teamList, ParseException e) {
+            public void done(List<ParseObject> playerList, ParseException e) {
                 if (e == null) {
-                    Log.d(tag, "Retrieved Teams: " + teamList.size() + " teams");
+                    Log.d(tag, "Retrieved Players: " + playerList.size() + " players");
+                    for (ParseObject player: playerList){
+                        Log.d(tag, "Name: " + player.getString("name") +
+                                        " has a market value <1.5M : " +player.getInt("marketValue"));
+                    }
                 } else {
                     Log.d("score", "Error: " + e.getMessage());
                 }
