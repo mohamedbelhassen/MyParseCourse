@@ -24,8 +24,7 @@ public class MainActivity extends AppCompatActivity {
         String tag="MainActivity";
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Player");
-        String[] position = {"Centre Forward", "Centre Back"};
-        query.whereContainedIn("position", Arrays.asList(position));
+        query.selectKeys(Arrays.asList("name", "marketValue", "position"));
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> playerList, ParseException e) {
                 if (e == null) {
