@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(tag, "Retrieved Players: " + playerList.size() + " players");
                     for (ParseObject player: playerList){
                         Log.d(tag, "Name: " + player.getString("name") +
-                                        " is a player having a market value >1.5M : " +
+                                        " is a player having a market value of : " +
                                         player.getInt("marketValue") +
                                         " ,Position: "+ player.getString("position"));
                     }
