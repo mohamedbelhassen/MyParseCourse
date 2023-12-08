@@ -25,15 +25,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> expensiveTeamQuery = ParseQuery.getQuery("Team");
-        expensiveTeamQuery.whereGreaterThan("squadMarketValue",100000);
+        ParseQuery<ParseObject> q1 = ParseQuery.getQuery("Player");
+        q1.whereEqualTo("nationality","England");
 
-        ParseQuery<ParseObject> playerQuery = ParseQuery.getQuery("Player");
-        playerQuery.whereMatchesQuery("team",expensiveTeamQuery);
+        ParseQuery<ParseObject> q2 = ParseQuery.getQuery("Player");
+        q1.whereEqualTo("marketValue",5000);
+        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
+        queries.add(q1);
+        queries.add(q2);
+        ParseQuery<ParseObject> q = ParseQuery.or(queries);
 
-        playerQuery.countInBackground((count, e1) -> {
+        q.countInBackground((count, e1) -> {
             if (e1 == null) {
-                Log.d(tag, " Number of players belonging to expensive teams : " + count + " players");
+                Log.d(tag, "Found: " + count + " players who are from England or cheap");
             }
         });
     }
