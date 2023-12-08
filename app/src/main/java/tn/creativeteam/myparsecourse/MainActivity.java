@@ -29,14 +29,13 @@ public class MainActivity extends AppCompatActivity {
         expensiveTeamQuery.whereGreaterThan("squadMarketValue",100000);
 
         ParseQuery<ParseObject> playerQuery = ParseQuery.getQuery("Player");
-        playerQuery.whereMatchesKeyInQuery("teamCode","code",expensiveTeamQuery);
+        playerQuery.whereMatchesQuery("team",expensiveTeamQuery);
 
         playerQuery.countInBackground((count, e1) -> {
             if (e1 == null) {
                 Log.d(tag, " Number of players belonging to expensive teams : " + count + " players");
             }
         });
-
     }
 
 
