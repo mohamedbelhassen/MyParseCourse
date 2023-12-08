@@ -24,16 +24,15 @@ public class MainActivity extends AppCompatActivity {
         String tag="MainActivity";
 
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Player");
-        query.whereGreaterThan("marketValue", 1500);
-        query.whereEqualTo("position","Keeper");
-        query.orderByAscending("marketValue");
+        query.setLimit(10);
+        query.setSkip(30);
         query.findInBackground(new FindCallback<ParseObject>() {
             public void done(List<ParseObject> playerList, ParseException e) {
                 if (e == null) {
                     Log.d(tag, "Retrieved Players: " + playerList.size() + " players");
                     for (ParseObject player: playerList){
                         Log.d(tag, "Name: " + player.getString("name") +
-                                        " is a player having a market value >1.5M : " +
+                                        " is a player having a market value of : " +
                                         player.getInt("marketValue") +
                                         " ,Position: "+ player.getString("position"));
                     }
