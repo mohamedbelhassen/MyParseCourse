@@ -17,6 +17,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.RequestPasswordResetCallback;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        Button btn= findViewById(R.id.btnLogout);
+        Button btn= findViewById(R.id.btnReinitPassword);
         btn.setVisibility(View.INVISIBLE);
 
         ParseUser.logInInBackground("Mohamed Belhassen", "123", (user, e) -> {
@@ -44,13 +45,17 @@ public class MainActivity extends AppCompatActivity {
                 showAlertDialog("Login Error","Error: "+e.getMessage(),"Ok");
             }
         });
+
         btn.setOnClickListener(view -> {
-            ParseUser.logOut();
-            btn.setVisibility(View.INVISIBLE);
-            if(ParseUser.getCurrentUser()== null){
-                TextView tvEmail=findViewById(R.id.tv_email);
-                tvEmail.setText("User not connected");
-            }
+            ParseUser.requestPasswordResetInBackground("mohamed.belhassen@gmail.com", e -> {
+                if (e == null) {
+                    showAlertDialog("Password Reset success",
+                            "Please check your email to reset your password","Ok");
+                } else {
+                    showAlertDialog("Password Reset failure","Error: "+
+                            e.getMessage(),"Ok");
+                }
+            });
         });
     }
 
@@ -62,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 .setTitle(Title)
                 .setPositiveButton(buttonText, (dialogInterface, i) -> {
                     dialogInterface.dismiss();
-                    finish();});
+                    });
         AlertDialog alertDialog= alertDBuilder.create();
         alertDialog.show();
     }
