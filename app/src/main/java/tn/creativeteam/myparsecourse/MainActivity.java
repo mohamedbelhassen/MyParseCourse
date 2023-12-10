@@ -11,7 +11,9 @@ import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,19 +27,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseQuery<ParseObject> q1 = ParseQuery.getQuery("Player");
-        q1.whereEqualTo("nationality","England");
+        ParseUser user = new ParseUser();
+        //User required Fields
+        user.setUsername("Mohamed Belhassen");
+        user.setPassword("123");
+        user.setEmail("mohamed.belhassen@gmail.com");
+        //add some optional fields according your needs
+        user.put("phone", "97 100 000");
+        user.put("address", "Métouia, Gabes, Tunisia");
 
-        ParseQuery<ParseObject> q2 = ParseQuery.getQuery("Player");
-        q1.whereEqualTo("marketValue",5000);
-        List<ParseQuery<ParseObject>> queries = new ArrayList<ParseQuery<ParseObject>>();
-        queries.add(q1);
-        queries.add(q2);
-        ParseQuery<ParseObject> q = ParseQuery.or(queries);
-
-        q.countInBackground((count, e1) -> {
-            if (e1 == null) {
-                Log.d(tag, "Found: " + count + " players who are from England or cheap");
+        user.signUpInBackground(e -> {
+            if (e == null) {
+                Log.d(tag,"User account created successfully");
+            } else {
+                Log.e(tag,"Error encountered when creating user account: "+e.getMessage());
             }
         });
     }
