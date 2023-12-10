@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -27,20 +29,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseUser user = new ParseUser();
-        //User required Fields
-        user.setUsername("Mohamed Belhassen");
-        user.setPassword("123");
-        user.setEmail("mohamed.belhassen@gmail.com");
-        //add some optional fields according your needs
-        user.put("phone", "97 100 000");
-        user.put("address", "Métouia, Gabes, Tunisia");
-
-        user.signUpInBackground(e -> {
+        ParseUser.logInInBackground("Mohamed Belhassen", "123", (user, e) -> {
             if (e == null) {
-                Log.d(tag,"User account created successfully");
+                Log.d(tag,"User successfully logged in");
+                TextView tvEmail=findViewById(R.id.tv_email);
+                tvEmail.setText(ParseUser.getCurrentUser().getEmail());
             } else {
-                Log.e(tag,"Error encountered when creating user account: "+e.getMessage());
+                Log.e(tag,"Error encountered during user login: "+e.getMessage());
             }
         });
     }
