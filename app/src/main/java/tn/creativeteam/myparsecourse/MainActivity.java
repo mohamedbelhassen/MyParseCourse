@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.parse.CountCallback;
@@ -30,15 +32,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         String tag="MainActivity";
 
-        ParseUser.logInInBackground("Mohamed Belhassen", "1233", (user, e) -> {
+        Button btn= findViewById(R.id.btnLogout);
+        btn.setVisibility(View.INVISIBLE);
+
+        ParseUser.logInInBackground("Mohamed Belhassen", "123", (user, e) -> {
             if (e == null) {
-                Log.d(tag,"User successfully logged in");
                 TextView tvEmail=findViewById(R.id.tv_email);
                 tvEmail.setText(ParseUser.getCurrentUser().getEmail());
+                btn.setVisibility(View.VISIBLE);
             } else {
-                String error="Error: "+e.getMessage();
-                Log.e(tag,error);
-                showAlertDialog("Login Error",error,"Ok");
+                showAlertDialog("Login Error","Error: "+e.getMessage(),"Ok");
+            }
+        });
+        btn.setOnClickListener(view -> {
+            ParseUser.logOut();
+            btn.setVisibility(View.INVISIBLE);
+            if(ParseUser.getCurrentUser()== null){
+                TextView tvEmail=findViewById(R.id.tv_email);
+                tvEmail.setText("User not connected");
             }
         });
     }
